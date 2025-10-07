@@ -2,13 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Counter.Models"
+             xmlns:converters="clr-namespace:Counter.Converters"
              x:Class="Counter.Views.CountersView"
              Title="Counters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringHexToColorConverter x:Key="StringHexToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid RowDefinitions="*, Auto">
         <CollectionView ItemsSource="{Binding Counters}" Grid.Row="0">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CounterModel">
-                    <Frame Padding="10" Margin="10">
+                    <Frame Padding="10" Margin="10" BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}">
                         <VerticalStackLayout>
                             <Label Text="{Binding Name}" FontSize="Large" />
                             <Label Text="{Binding Value}" FontSize="Medium" />
