@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Counter.Models"
              xmlns:converters="clr-namespace:Counter.Converters"
+             xmlns:viewModels="clr-namespace:Counter.ViewModels"
+             x:DataType="viewModels:CountersViewModel"
              x:Class="Counter.Views.CountersView"
              Title="Counters">
     <ContentPage.Resources>
@@ -19,10 +21,10 @@
                             <Label Text="{Binding Name}" FontSize="Large" />
                             <Label Text="{Binding Value}" FontSize="Medium" />
                             <StackLayout Orientation="Horizontal">
-                                <Button Text="+" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.IncrementCommand}" CommandParameter="{Binding .}" />
-                                <Button Text="-" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DecrementCommand}" CommandParameter="{Binding .}" />
-                                <Button Text="Reset" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ResetCommand}" CommandParameter="{Binding .}" />
-                                <Button Text="Remove" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="+" Command="{Binding IncrementCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="-" Command="{Binding DecrementCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="Reset" Command="{Binding ResetCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="Remove" Command="{Binding RemoveCommand}" CommandParameter="{Binding .}" />
                             </StackLayout>
                         </VerticalStackLayout>
                     </Frame>

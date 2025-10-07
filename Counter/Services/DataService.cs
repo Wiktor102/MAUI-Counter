@@ -32,7 +32,8 @@ namespace Counter.Services
             var serializer = new XmlSerializer(typeof(ObservableCollection<CounterModel>));
             using (var reader = new StreamReader(_filePath))
             {
-                return (ObservableCollection<CounterModel>)serializer.Deserialize(reader);
+                var counters = (ObservableCollection<CounterModel>?)serializer.Deserialize(reader);
+                return counters ?? new ObservableCollection<CounterModel>();
             }
         }
     }

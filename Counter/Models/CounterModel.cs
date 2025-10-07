@@ -1,12 +1,13 @@
-
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace Counter.Models
 {
     public class CounterModel : INotifyPropertyChanged
     {
-        private string _name;
+        private string _name = string.Empty;
         public string Name
         {
             get => _name;
@@ -48,7 +49,7 @@ namespace Counter.Models
             }
         }
 
-        private string _color;
+        private string _color = string.Empty;
         public string Color
         {
             get => _color;
@@ -62,9 +63,18 @@ namespace Counter.Models
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        [XmlIgnore]
+        public ICommand? IncrementCommand { get; set; }
+        [XmlIgnore]
+        public ICommand? DecrementCommand { get; set; }
+        [XmlIgnore]
+        public ICommand? ResetCommand { get; set; }
+        [XmlIgnore]
+        public ICommand? RemoveCommand { get; set; }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

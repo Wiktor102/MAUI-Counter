@@ -1,4 +1,3 @@
-
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -13,7 +12,7 @@ namespace Counter.ViewModels
         private readonly DataService _dataService;
         public ObservableCollection<CounterModel> Counters { get; set; }
 
-        private string _newCounterName;
+        private string _newCounterName = string.Empty;
         public string NewCounterName
         {
             get => _newCounterName;
@@ -27,7 +26,7 @@ namespace Counter.ViewModels
             }
         }
 
-        private string _newCounterInitialValue;
+        private string _newCounterInitialValue = string.Empty;
         public string NewCounterInitialValue
         {
             get => _newCounterInitialValue;
@@ -41,7 +40,7 @@ namespace Counter.ViewModels
             }
         }
 
-        private string _newCounterColor;
+        private string _newCounterColor = string.Empty;
         public string NewCounterColor
         {
             get => _newCounterColor;
@@ -56,10 +55,6 @@ namespace Counter.ViewModels
         }
 
         public ICommand AddCounterCommand { get; }
-        public ICommand IncrementCommand { get; }
-        public ICommand DecrementCommand { get; }
-        public ICommand ResetCommand { get; }
-        public ICommand RemoveCommand { get; }
 
         public CountersViewModel(DataService dataService)
         {
@@ -67,15 +62,20 @@ namespace Counter.ViewModels
             Counters = _dataService.LoadCounters();
 
             AddCounterCommand = new Command(AddCounter);
-            IncrementCommand = new Command<CounterModel>(IncrementCounter);
-            DecrementCommand = new Command<CounterModel>(DecrementCounter);
-            ResetCommand = new Command<CounterModel>(ResetCounter);
-            RemoveCommand = new Command<CounterModel>(RemoveCounter);
 
             foreach (var counter in Counters)
             {
                 counter.PropertyChanged += Counter_PropertyChanged;
+                SetCounterCommands(counter);
             }
+        }
+
+        private void SetCounterCommands(CounterModel counter)
+        {
+            counter.IncrementCommand = new Command<CounterModel>(IncrementCounter);
+            counter.DecrementCommand = new Command<CounterModel>(DecrementCounter);
+            counter.ResetCommand = new Command<CounterModel>(ResetCounter);
+            counter.RemoveCommand = new Command<CounterModel>(RemoveCounter);
         }
 
         private void AddCounter()
@@ -98,6 +98,7 @@ namespace Counter.ViewModels
             };
 
             newCounter.PropertyChanged += Counter_PropertyChanged;
+            SetCounterCommands(newCounter);
             Counters.Add(newCounter);
             _dataService.SaveCounters(Counters);
 
@@ -140,7 +141,7 @@ namespace Counter.ViewModels
             }
         }
 
-        private void Counter_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Counter_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(CounterModel.Value))
             {
@@ -148,9 +149,9 @@ namespace Counter.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
