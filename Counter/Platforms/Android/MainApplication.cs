@@ -1,16 +1,13 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace Counter
-{
-    [Application]
-    public class MainApplication : MauiApplication
-    {
-        public MainApplication(IntPtr handle, JniHandleOwnership ownership)
-            : base(handle, ownership)
-        {
-        }
+namespace Counter {
+	[Application]
+	public class MainApplication : MauiApplication {
+		public MainApplication(IntPtr handle, JniHandleOwnership ownership)
+			: base(handle, ownership) {
+		}
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+		protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+	}
 }
