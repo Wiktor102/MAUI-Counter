@@ -1,13 +1,16 @@
+
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Counter.Models;
+using Counter.Services;
 
 namespace Counter.ViewModels
 {
     public class CountersViewModel : INotifyPropertyChanged
     {
+        private readonly DataService _dataService;
         public ObservableCollection<CounterModel> Counters { get; set; }
 
         private string _newCounterName;
@@ -58,15 +61,21 @@ namespace Counter.ViewModels
         public ICommand ResetCommand { get; }
         public ICommand RemoveCommand { get; }
 
-        public CountersViewModel()
+        public CountersViewModel(DataService dataService)
         {
-            Counters = new ObservableCollection<CounterModel>();
+            _dataService = dataService;
+            Counters = _dataService.LoadCounters();
 
             AddCounterCommand = new Command(AddCounter);
             IncrementCommand = new Command<CounterModel>(IncrementCounter);
             DecrementCommand = new Command<CounterModel>(DecrementCounter);
             ResetCommand = new Command<CounterModel>(ResetCounter);
             RemoveCommand = new Command<CounterModel>(RemoveCounter);
+
+            foreach (var counter in Counters)
+            {
+                counter.PropertyChanged += Counter_PropertyChanged;
+            }
         }
 
         private void AddCounter()
@@ -88,7 +97,9 @@ namespace Counter.ViewModels
                 Color = string.IsNullOrWhiteSpace(NewCounterColor) ? "#000000" : NewCounterColor
             };
 
+            newCounter.PropertyChanged += Counter_PropertyChanged;
             Counters.Add(newCounter);
+            _dataService.SaveCounters(Counters);
 
             NewCounterName = string.Empty;
             NewCounterInitialValue = string.Empty;
@@ -123,7 +134,17 @@ namespace Counter.ViewModels
         {
             if (counter != null)
             {
+                counter.PropertyChanged -= Counter_PropertyChanged;
                 Counters.Remove(counter);
+                _dataService.SaveCounters(Counters);
+            }
+        }
+
+        private void Counter_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(CounterModel.Value))
+            {
+                _dataService.SaveCounters(Counters);
             }
         }
 

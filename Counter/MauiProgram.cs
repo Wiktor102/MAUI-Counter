@@ -1,4 +1,5 @@
-﻿using Counter.ViewModels;
+﻿using Counter.Services;
+using Counter.ViewModels;
 using Counter.Views;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,12 @@ namespace Counter
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-builder.Services.AddSingleton<CountersViewModel>();
+builder.Services.AddSingleton<DataService>();
+            builder.Services.AddSingleton<CountersViewModel>(serviceProvider =>
+            {
+                var dataService = serviceProvider.GetRequiredService<DataService>();
+                return new CountersViewModel(dataService);
+            });
             builder.Services.AddSingleton<CountersView>();
 
 #if DEBUG
