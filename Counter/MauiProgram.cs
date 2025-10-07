@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Counter.ViewModels;
+using Counter.Views;
+using Microsoft.Extensions.Logging;
 
 namespace Counter
 {
@@ -14,6 +16,9 @@ namespace Counter
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+builder.Services.AddSingleton<CountersViewModel>();
+            builder.Services.AddSingleton<CountersView>();
 
 #if DEBUG
     		builder.Logging.AddDebug();

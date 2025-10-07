@@ -1,9 +1,12 @@
+using Counter.ViewModels;
+
 namespace Counter.Views;
 
 public partial class CountersView : ContentPage
 {
-	public CountersView()
+	public CountersView(CountersViewModel viewModel)
 	{
 		InitializeComponent();
+		BindingContext = viewModel;
 	}
 }

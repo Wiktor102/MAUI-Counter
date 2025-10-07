@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Counter.Models"
              x:Class="Counter.Views.CountersView"
              Title="Counters">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="*, Auto">
+        <CollectionView ItemsSource="{Binding Counters}" Grid.Row="0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CounterModel">
+                    <Frame Padding="10" Margin="10">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Name}" FontSize="Large" />
+                            <Label Text="{Binding Value}" FontSize="Medium" />
+                            <StackLayout Orientation="Horizontal">
+                                <Button Text="+" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.IncrementCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="-" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DecrementCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="Reset" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ResetCommand}" CommandParameter="{Binding .}" />
+                                <Button Text="Remove" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCommand}" CommandParameter="{Binding .}" />
+                            </StackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
+            <Entry Placeholder="Counter Name" Text="{Binding NewCounterName}" />
+            <Entry Placeholder="Initial Value" Keyboard="Numeric" Text="{Binding NewCounterInitialValue}" />
+            <Entry Placeholder="Color (e.g., #FF0000)" Text="{Binding NewCounterColor}" />
+            <Button Text="Add Counter" Command="{Binding AddCounterCommand}" />
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
