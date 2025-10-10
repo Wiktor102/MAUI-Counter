@@ -12,31 +12,44 @@
             <converters:StringHexToColorConverter x:Key="StringHexToColorConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <Grid RowDefinitions="*, Auto">
+    <Grid RowDefinitions="*, Auto" Padding="12">
         <CollectionView ItemsSource="{Binding Counters}" Grid.Row="0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CounterModel">
-                    <Frame Padding="10" Margin="10" BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}">
+                    <Border Padding="10" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}">
                         <VerticalStackLayout>
                             <Label Text="{Binding Name}" FontSize="Large" />
                             <Label Text="{Binding Value}" FontSize="Medium" />
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal" Spacing="8">
                                 <Button Text="+" Command="{Binding IncrementCommand}" CommandParameter="{Binding .}" />
                                 <Button Text="-" Command="{Binding DecrementCommand}" CommandParameter="{Binding .}" />
                                 <Button Text="Reset" Command="{Binding ResetCommand}" CommandParameter="{Binding .}" />
                                 <Button Text="Remove" Command="{Binding RemoveCommand}" CommandParameter="{Binding .}" />
                             </StackLayout>
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <VerticalStackLayout Grid.Row="1" Padding="10" Spacing="10">
-            <Entry Placeholder="Counter Name" Text="{Binding NewCounterName}" />
-            <Entry Placeholder="Initial Value" Keyboard="Numeric" Text="{Binding NewCounterInitialValue}" />
-            <Entry Placeholder="Color (e.g., #FF0000)" Text="{Binding NewCounterColor}" />
-            <Button Text="Add Counter" Command="{Binding AddCounterCommand}" />
-        </VerticalStackLayout>
+        <Grid Grid.Row="1" RowSpacing="16" Padding="0,12,0,0" ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Entry Grid.Row="0" Grid.ColumnSpan="2" Placeholder="Counter Name" Text="{Binding NewCounterName}" />
+            <Entry Grid.Row="1" Grid.Column="0" Placeholder="Initial Value" Keyboard="Numeric" Text="{Binding NewCounterInitialValue}" />
+            <Entry Grid.Row="1" Grid.Column="1" Placeholder="Color (e.g., #FF0000)" Text="{Binding NewCounterColor}" />
+            <Button Grid.Row="2" Grid.ColumnSpan="2" Text="Add Counter" Command="{Binding AddCounterCommand}" />
+        </Grid>
     </Grid>
 </ContentPage>
