@@ -14,20 +14,18 @@ namespace Counter.Services {
 
 		public void SaveCounters(ObservableCollection<CounterModel> counters) {
 			var serializer = new XmlSerializer(typeof(ObservableCollection<CounterModel>));
-			using (var writer = new StreamWriter(_filePath)) {
-				serializer.Serialize(writer, counters);
-			}
+			using var writer = new StreamWriter(_filePath);
+			serializer.Serialize(writer, counters);
 		}
 
 		public ObservableCollection<CounterModel> LoadCounters() {
 			if (!File.Exists(_filePath))
-				return new ObservableCollection<CounterModel>();
+				return [];
 
 			var serializer = new XmlSerializer(typeof(ObservableCollection<CounterModel>));
-			using (var reader = new StreamReader(_filePath)) {
-				var counters = (ObservableCollection<CounterModel>?)serializer.Deserialize(reader);
-				return counters ?? new ObservableCollection<CounterModel>();
-			}
+			using var reader = new StreamReader(_filePath);
+			var counters = (ObservableCollection<CounterModel>?)serializer.Deserialize(reader);
+			return counters ?? [];
 		}
 	}
 }
