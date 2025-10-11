@@ -6,7 +6,8 @@
              x:DataType="viewModels:CountersViewModel">
     <Grid RowSpacing="16"
           ColumnSpacing="8"
-          Padding="0,12,0,0">
+          Padding="16"
+          BackgroundColor="{DynamicResource Gray950}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>

@@ -7,33 +7,40 @@
              x:DataType="models:CounterModel">
     <ContentView.Resources>
         <ResourceDictionary>
-            <converters:StringHexToColorConverter x:Key="StringHexToColorConverter" />
+            <converters:StringHexToColorConverter x:Key="StringHexToColorConverter"/>
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <Border Padding="10"
-            StrokeShape="RoundRectangle 16"
+    <Border Padding="16"
+            StrokeShape="RoundRectangle 8"
             StrokeThickness="0"
-            BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}">
+            BackgroundColor="{DynamicResource Gray950}">
         <VerticalStackLayout>
             <Label Text="{Binding Name}"
-                   FontSize="Large" />
+                   FontSize="Medium"
+                   TextColor="Gray"/>
             <Label Text="{Binding Value}"
-                   FontSize="Medium" />
+                   FontSize="Large"
+                   />
             <StackLayout Orientation="Horizontal"
-                         Spacing="8">
+                         Spacing="8"
+                         Margin="0,8,0,0">
                 <Button Text="+"
+                        BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
                         Command="{Binding IncrementCommand}"
-                        CommandParameter="{Binding .}" />
+                        CommandParameter="{Binding .}"/>
                 <Button Text="-"
+                        BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
                         Command="{Binding DecrementCommand}"
-                        CommandParameter="{Binding .}" />
+                        CommandParameter="{Binding .}"/>
                 <Button Text="Reset"
+                        BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
                         Command="{Binding ResetCommand}"
-                        CommandParameter="{Binding .}" />
+                        CommandParameter="{Binding .}"/>
                 <Button Text="Remove"
+                        BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
                         Command="{Binding RemoveCommand}"
-                        CommandParameter="{Binding .}" />
+                        CommandParameter="{Binding .}"/>
             </StackLayout>
         </VerticalStackLayout>
     </Border>

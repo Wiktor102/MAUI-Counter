@@ -6,6 +6,13 @@
     xmlns:local="clr-namespace:Counter.Views"
     Title="Counter">
 
+    <Shell.TitleView>
+        <StackLayout Orientation="Horizontal" Padding="8" Spacing="8" BackgroundColor="{DynamicResource Primary}">
+            <Label Text="Counter App" VerticalTextAlignment="End" FontSize="Subtitle" FontAttributes="Bold" />
+            <Label Text="Made with ❤️ by Wiktor Golicz" VerticalTextAlignment="End" FontSize="Body" TextColor="LightGray" />
+        </StackLayout>
+    </Shell.TitleView>
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:CountersView}"

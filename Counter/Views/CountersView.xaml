@@ -7,18 +7,36 @@
              x:DataType="viewModels:CountersViewModel"
              x:Class="Counter.Views.CountersView"
              Title="Counters">
-    <Grid RowDefinitions="*, Auto" Padding="12">
-        <CollectionView ItemsSource="{Binding Counters}" Grid.Row="0">
+    <Grid RowDefinitions="*, Auto">
+        <CollectionView ItemsSource="{Binding Counters}"
+                        Grid.Row="0"
+                        Margin="16">
+            <CollectionView.EmptyView>
+                <Border BackgroundColor="{DynamicResource Gray950}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        Padding="12">
+                    <StackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center">
+                        <Label Text="No counters added. Use the form at the bottom to create your first counter."
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </Border>
+            </CollectionView.EmptyView>
+
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                <GridItemsLayout Orientation="Vertical"
+                                 Span="2"
+                                 HorizontalItemSpacing="8"
+                                 VerticalItemSpacing="8"/>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:CounterModel">
-                    <views:CounterCardView />
+                    <views:CounterCardView/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <views:AddCounterFormView Grid.Row="1" />
+        <views:AddCounterFormView Grid.Row="1"/>
     </Grid>
 </ContentPage>
