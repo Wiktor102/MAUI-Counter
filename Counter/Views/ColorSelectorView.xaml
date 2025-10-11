@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Counter.Models"
+             x:Class="Counter.Views.ColorSelectorView"
+             x:Name="ColorSelector">
+    <VerticalStackLayout Spacing="8">
+        <Label Text="Counter Color"/>
+        <HorizontalStackLayout Spacing="12"
+                               BindableLayout.ItemsSource="{Binding Options, Source={x:Reference ColorSelector}}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="models:ColorOption">
+                    <Border WidthRequest="24"
+                            HeightRequest="24"
+                            BackgroundColor="{Binding HexCode}"
+                            Stroke="{DynamicResource Gray700}"
+                            StrokeShape="RoundRectangle 18"
+                            StrokeThickness="1">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.SelectColorCommand, Source={x:Reference ColorSelector}}"
+                                                  CommandParameter="{Binding .}"/>
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border"
+                                         Binding="{Binding IsSelected}"
+                                         Value="True">
+                                <Setter Property="Stroke" Value="{DynamicResource Magenta}"/>
+                                <Setter Property="StrokeThickness" Value="2"/>
+                            </DataTrigger>
+                        </Border.Triggers>
+                    </Border>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentView>

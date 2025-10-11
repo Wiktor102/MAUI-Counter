@@ -2,6 +2,7 @@ using Counter.Models;
 using Counter.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
@@ -32,24 +33,32 @@ namespace Counter.ViewModels {
 			}
 		}
 
-		private string _newCounterColor = string.Empty;
-		public string NewCounterColor {
-			get => _newCounterColor;
+		private ColorOption? _selectedColor;
+		public ColorOption? SelectedColor {
+			get => _selectedColor;
 			set {
-				if (_newCounterColor != value) {
-					_newCounterColor = value;
+				if (_selectedColor != value) {
+					if (_selectedColor != null) {
+						_selectedColor.IsSelected = false;
+					}
+					_selectedColor = value;
+					if (_selectedColor != null) {
+						_selectedColor.IsSelected = true;
+					}
 					OnPropertyChanged();
 				}
 			}
 		}
 
 		public ICommand AddCounterCommand { get; }
+		public ICommand SelectColorCommand { get; }
 
 		public CountersViewModel(DataService dataService) {
 			_dataService = dataService;
 			Counters = _dataService.LoadCounters();
 
 			AddCounterCommand = new Command(AddCounter);
+			SelectColorCommand = new Command<ColorOption>(SelectColor);
 
 			foreach (var counter in Counters) {
 				counter.PropertyChanged += Counter_PropertyChanged;
@@ -70,14 +79,16 @@ namespace Counter.ViewModels {
 
 			var initialValue = 0;
 			if (!string.IsNullOrWhiteSpace(NewCounterInitialValue)) {
-				int.TryParse(NewCounterInitialValue, out initialValue);
+				if (!int.TryParse(NewCounterInitialValue, out initialValue)) {
+					initialValue = 0;
+				}
 			}
 
 			var newCounter = new CounterModel {
 				Name = NewCounterName,
 				Value = initialValue,
 				InitialValue = initialValue,
-				Color = string.IsNullOrWhiteSpace(NewCounterColor) ? "#000000" : NewCounterColor
+				Color = SelectedColor?.HexCode ?? "#000000"
 			};
 
 			newCounter.PropertyChanged += Counter_PropertyChanged;
@@ -87,7 +98,13 @@ namespace Counter.ViewModels {
 
 			NewCounterName = string.Empty;
 			NewCounterInitialValue = string.Empty;
-			NewCounterColor = string.Empty;
+		}
+
+		private void SelectColor(ColorOption? option) {
+			if (option == null)
+				return;
+
+			SelectedColor = option;
 		}
 
 		private void IncrementCounter(CounterModel counter) {

@@ -20,8 +20,7 @@
                    FontSize="Medium"
                    TextColor="Gray"/>
             <Label Text="{Binding Value}"
-                   FontSize="Large"
-                   />
+                   FontSize="Large"/>
             <StackLayout Orientation="Horizontal"
                          Spacing="8"
                          Margin="0,8,0,0">
