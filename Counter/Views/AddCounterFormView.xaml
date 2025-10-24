@@ -5,7 +5,7 @@
              xmlns:views="clr-namespace:Counter.Views"
              x:Class="Counter.Views.AddCounterFormView"
              x:Name="AddCounterForm"
-             x:DataType="viewModels:CountersViewModel">
+             x:DataType="viewModels:AddCounterFormViewModel">
     <Grid RowSpacing="16"
           ColumnSpacing="16"
           Padding="16"
@@ -32,9 +32,9 @@
 
         <views:ColorSelectorView Grid.Row="1"
                                  Grid.Column="1"/>
-        <Button Grid.Row="3"
+        <Button Grid.Row="2"
                 Grid.ColumnSpan="2"
                 Text="Add Counter"
-                Command="{Binding AddCounterCommand}"/>
+                Clicked="OnAdd"/>
     </Grid>
 </ContentView>

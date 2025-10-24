@@ -37,6 +37,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <views:AddCounterFormView Grid.Row="1"/>
+        <views:AddCounterFormView Grid.Row="1" BindingContext="{Binding AddCounterFormModel}"/>
     </Grid>
 </ContentPage>

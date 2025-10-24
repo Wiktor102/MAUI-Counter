@@ -2,13 +2,17 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Counter.Models"
+             xmlns:viewModels="clr-namespace:Counter.ViewModels"
              x:Class="Counter.Views.ColorSelectorView"
-             x:Name="ColorSelector">
+             x:Name="ColorSelector"
+             x:DataType="viewModels:AddCounterFormViewModel">
     <VerticalStackLayout Spacing="8">
         <Label Text="Counter Color"/>
-        <HorizontalStackLayout Spacing="12"
-                               BindableLayout.ItemsSource="{Binding Options, Source={x:Reference ColorSelector}}">
-            <BindableLayout.ItemTemplate>
+        <CollectionView ItemsSource="{Binding Options, Source={x:Reference ColorSelector}}"
+                        ItemsLayout="HorizontalList"
+                        SelectionMode="None"
+                        HorizontalOptions="Start">
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ColorOption">
                     <Border WidthRequest="24"
                             HeightRequest="24"
@@ -17,20 +21,22 @@
                             StrokeShape="RoundRectangle 18"
                             StrokeThickness="1">
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding BindingContext.SelectColorCommand, Source={x:Reference ColorSelector}}"
+                            <TapGestureRecognizer Tapped="OnColorTapped"
                                                   CommandParameter="{Binding .}"/>
                         </Border.GestureRecognizers>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border"
                                          Binding="{Binding IsSelected}"
                                          Value="True">
-                                <Setter Property="Stroke" Value="{DynamicResource Magenta}"/>
-                                <Setter Property="StrokeThickness" Value="2"/>
+                                <Setter Property="Stroke"
+                                        Value="{DynamicResource Magenta}"/>
+                                <Setter Property="StrokeThickness"
+                                        Value="2"/>
                             </DataTrigger>
                         </Border.Triggers>
                     </Border>
                 </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </HorizontalStackLayout>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentView>
