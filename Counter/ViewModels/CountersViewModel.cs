@@ -7,75 +7,53 @@ using System.Runtime.CompilerServices;
 namespace Counter.ViewModels {
 	public class CountersViewModel : INotifyPropertyChanged {
 		private readonly DataService _dataService;
-		public ObservableCollection<CounterModel> Counters { get; set; }
 
-		// ViewModel for the add-counter form
-		public AddCounterFormViewModel AddCounterFormModel { get; }
+		public ObservableCollection<CounterItemViewModel> Counters { get; set; }
 
 		public CountersViewModel(DataService dataService) {
 			_dataService = dataService;
-			Counters = _dataService.LoadCounters();
 
-			AddCounterFormModel = new AddCounterFormViewModel();
-			AddCounterFormModel.AddRequested += AddCounterFormModel_AddRequested; // TODO: Sprawdzić jak to szczegółowo działa
-
-			foreach (var counter in Counters) {
-				counter.PropertyChanged += Counter_PropertyChanged;
-				SetCounterCommands(counter);
-			}
+			// Load counter models and wrap them in ViewModels
+			var counterModels = _dataService.LoadCounters();
+			Counters = new ObservableCollection<CounterItemViewModel>(
+				counterModels.Select(CreateCounterItemViewModel)
+			);
 		}
 
-		private void AddCounterFormModel_AddRequested(object? sender, AddCounterFormViewModel.AddCounterEventArgs e) {
-			var newCounter = new CounterModel {
-				Name = e.Name,
-				Value = e.InitialValue,
-				InitialValue = e.InitialValue,
-				Color = e.ColorHex
+		public void AddCounter(string name, int initialValue, string colorHex) {
+			var newModel = new CounterModel {
+				Name = name,
+				Value = initialValue,
+				InitialValue = initialValue,
+				Color = colorHex
 			};
 
-			newCounter.PropertyChanged += Counter_PropertyChanged;
-			SetCounterCommands(newCounter);
-			Counters.Add(newCounter);
-			_dataService.SaveCounters(Counters);
+			var counterItemViewModel = CreateCounterItemViewModel(newModel);
+			Counters.Add(counterItemViewModel);
+			SaveCounters();
 		}
 
-		private void SetCounterCommands(CounterModel counter) {
-			counter.IncrementCommand = new Command<CounterModel>(IncrementCounter);
-			counter.DecrementCommand = new Command<CounterModel>(DecrementCounter);
-			counter.ResetCommand = new Command<CounterModel>(ResetCounter);
-			counter.RemoveCommand = new Command<CounterModel>(RemoveCounter);
+		private CounterItemViewModel CreateCounterItemViewModel(CounterModel model) {
+			return new CounterItemViewModel(
+				model,
+				onCounterChanged: _ => SaveCounters(),
+				onCounterRemoved: RemoveCounter
+			);
 		}
 
-		private void IncrementCounter(CounterModel counter) {
-			if (counter != null) {
-				counter.Value++;
+		private void RemoveCounter(CounterModel model) {
+			var itemToRemove = Counters.FirstOrDefault(c => c.Model == model);
+			if (itemToRemove != null) {
+				Counters.Remove(itemToRemove);
+				SaveCounters();
 			}
 		}
 
-		private void DecrementCounter(CounterModel counter) {
-			if (counter != null) {
-				counter.Value--;
-			}
-		}
-
-		private void ResetCounter(CounterModel counter) {
-			if (counter != null) {
-				counter.Value = counter.InitialValue;
-			}
-		}
-
-		private void RemoveCounter(CounterModel counter) {
-			if (counter != null) {
-				counter.PropertyChanged -= Counter_PropertyChanged;
-				Counters.Remove(counter);
-				_dataService.SaveCounters(Counters);
-			}
-		}
-
-		private void Counter_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
-			if (e.PropertyName == nameof(CounterModel.Value)) {
-				_dataService.SaveCounters(Counters);
-			}
+		private void SaveCounters() {
+			var models = new ObservableCollection<CounterModel>(
+				Counters.Select(c => c.Model)
+			);
+			_dataService.SaveCounters(models);
 		}
 
 		public event PropertyChangedEventHandler? PropertyChanged;

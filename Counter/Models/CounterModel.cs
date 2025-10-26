@@ -1,7 +1,5 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using System.Xml.Serialization;
 
 namespace Counter.Models {
 	public class CounterModel : INotifyPropertyChanged {
@@ -48,15 +46,6 @@ namespace Counter.Models {
 				}
 			}
 		}
-
-		[XmlIgnore]
-		public ICommand? IncrementCommand { get; set; }
-		[XmlIgnore]
-		public ICommand? DecrementCommand { get; set; }
-		[XmlIgnore]
-		public ICommand? ResetCommand { get; set; }
-		[XmlIgnore]
-		public ICommand? RemoveCommand { get; set; }
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 

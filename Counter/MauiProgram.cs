@@ -14,11 +14,17 @@ namespace Counter {
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				});
 
+			// Register services
 			builder.Services.AddSingleton<DataService>();
-			builder.Services.AddSingleton<CountersViewModel>(serviceProvider => {
-				var dataService = serviceProvider.GetRequiredService<DataService>();
-				return new CountersViewModel(dataService);
+
+			// Register ViewModels
+			builder.Services.AddSingleton<CountersViewModel>();
+			builder.Services.AddSingleton<AddCounterFormViewModel>(serviceProvider => {
+				var countersViewModel = serviceProvider.GetRequiredService<CountersViewModel>();
+				return new AddCounterFormViewModel(countersViewModel.AddCounter);
 			});
+
+			// Register Views
 			builder.Services.AddSingleton<CountersView>();
 
 #if DEBUG

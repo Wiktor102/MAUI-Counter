@@ -1,95 +1,84 @@
 using Counter.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace Counter.ViewModels {
-    public class AddCounterFormViewModel : INotifyPropertyChanged {
-        private string _newCounterName = string.Empty;
-        public string NewCounterName {
-            get => _newCounterName;
-            set {
-                if (_newCounterName != value) {
-                    _newCounterName = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+	public class AddCounterFormViewModel(Action<string, int, string> onAddCounter) : INotifyPropertyChanged {
+		private readonly Action<string, int, string> _onAddCounter = onAddCounter;
+		private string _newCounterName = string.Empty;
+		public string NewCounterName {
+			get => _newCounterName;
+			set {
+				if (_newCounterName != value) {
+					_newCounterName = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        private string _newCounterInitialValue = string.Empty;
-        public string NewCounterInitialValue {
-            get => _newCounterInitialValue;
-            set {
-                if (_newCounterInitialValue != value) {
-                    _newCounterInitialValue = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+		private string _newCounterInitialValue = string.Empty;
+		public string NewCounterInitialValue {
+			get => _newCounterInitialValue;
+			set {
+				if (_newCounterInitialValue != value) {
+					_newCounterInitialValue = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        private ColorOption? _selectedColor;
-        public ColorOption? SelectedColor {
-            get => _selectedColor;
-            set {
-                if (_selectedColor != value) {
+		private ColorOption? _selectedColor;
+		public ColorOption? SelectedColor {
+			get => _selectedColor;
+			set {
+				if (_selectedColor != value) {
 					if (_selectedColor != null) {
 						_selectedColor.IsSelected = false;
 					}
-					
-                    _selectedColor = value;
+
+					_selectedColor = value;
 					if (_selectedColor != null) {
 						_selectedColor.IsSelected = true;
 					}
-					
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        public void SelectColor(ColorOption? option) {
-            if (option == null) return;
-            SelectedColor = option;
-        }
+					OnPropertyChanged();
+				}
+			}
+		}
 
-        public void Add() {
-            if (string.IsNullOrWhiteSpace(NewCounterName)) return;
+		public void SelectColor(ColorOption? option) {
+			if (option == null) return;
+			SelectedColor = option;
+		}
 
-            var initialValue = 0;
-            if (!string.IsNullOrWhiteSpace(NewCounterInitialValue)) {
-                if (!int.TryParse(NewCounterInitialValue, out initialValue)) {
-                    initialValue = 0;
-                }
-            }
+		public void Add() {
+			if (string.IsNullOrWhiteSpace(NewCounterName)) return;
 
-            var args = new AddCounterEventArgs {
-                Name = NewCounterName,
-                InitialValue = initialValue,
-                ColorHex = SelectedColor?.HexCode ?? "#000000"
-            };
+			var initialValue = 0;
+			if (!string.IsNullOrWhiteSpace(NewCounterInitialValue)) {
+				if (!int.TryParse(NewCounterInitialValue, out initialValue)) {
+					initialValue = 0;
+				}
+			}
 
-            AddRequested?.Invoke(this, args);
+			var colorHex = SelectedColor?.HexCode ?? "#000000";
 
-            // Clear the form
-            NewCounterName = string.Empty;
-            NewCounterInitialValue = string.Empty;
-            if (SelectedColor != null) {
-                SelectedColor.IsSelected = false;
-                SelectedColor = null;
-            }
-        }
+			// Call the callback to notify that a counter should be added
+			_onAddCounter(NewCounterName, initialValue, colorHex);
 
-        public event EventHandler<AddCounterEventArgs>? AddRequested;
+			// Clear the form
+			NewCounterName = string.Empty;
+			NewCounterInitialValue = string.Empty;
+			if (SelectedColor != null) {
+				SelectedColor.IsSelected = false;
+				SelectedColor = null;
+			}
+		}
 
-        public class AddCounterEventArgs : EventArgs {
-            public string Name { get; set; } = string.Empty;
-            public int InitialValue { get; set; }
-            public string ColorHex { get; set; } = "#000000";
-        }
+		public event PropertyChangedEventHandler? PropertyChanged;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+		protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
 }

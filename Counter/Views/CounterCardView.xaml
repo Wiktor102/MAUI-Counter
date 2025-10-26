@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:Counter.Models"
+             xmlns:viewModels="clr-namespace:Counter.ViewModels"
              xmlns:converters="clr-namespace:Counter.Converters"
              x:Class="Counter.Views.CounterCardView"
-             x:DataType="models:CounterModel">
+             x:DataType="viewModels:CounterItemViewModel">
     <ContentView.Resources>
         <ResourceDictionary>
             <converters:StringHexToColorConverter x:Key="StringHexToColorConverter"/>
@@ -26,20 +26,16 @@
                          Margin="0,8,0,0">
                 <Button Text="+"
                         BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
-                        Command="{Binding IncrementCommand}"
-                        CommandParameter="{Binding .}"/>
+                        Command="{Binding IncrementCommand}"/>
                 <Button Text="-"
                         BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
-                        Command="{Binding DecrementCommand}"
-                        CommandParameter="{Binding .}"/>
+                        Command="{Binding DecrementCommand}"/>
                 <Button Text="Reset"
                         BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
-                        Command="{Binding ResetCommand}"
-                        CommandParameter="{Binding .}"/>
+                        Command="{Binding ResetCommand}"/>
                 <Button Text="Remove"
                         BackgroundColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
-                        Command="{Binding RemoveCommand}"
-                        CommandParameter="{Binding .}"/>
+                        Command="{Binding RemoveCommand}"/>
             </StackLayout>
         </VerticalStackLayout>
     </Border>
