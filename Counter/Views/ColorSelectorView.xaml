@@ -6,37 +6,35 @@
              x:Class="Counter.Views.ColorSelectorView"
              x:Name="ColorSelector"
              x:DataType="viewModels:AddCounterFormViewModel">
-    <VerticalStackLayout Spacing="8">
-        <Label Text="Counter Color"/>
-        <CollectionView ItemsSource="{Binding Options, Source={x:Reference ColorSelector}}"
-                        ItemsLayout="HorizontalList"
-                        SelectionMode="None"
-                        HorizontalOptions="Start">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:ColorOption">
-                    <Border WidthRequest="24"
-                            HeightRequest="24"
-                            BackgroundColor="{Binding HexCode}"
-                            Stroke="{DynamicResource Gray700}"
-                            StrokeShape="RoundRectangle 18"
-                            StrokeThickness="1">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnColorTapped"
-                                                  CommandParameter="{Binding .}"/>
-                        </Border.GestureRecognizers>
-                        <Border.Triggers>
-                            <DataTrigger TargetType="Border"
-                                         Binding="{Binding IsSelected}"
-                                         Value="True">
-                                <Setter Property="Stroke"
-                                        Value="{DynamicResource Magenta}"/>
-                                <Setter Property="StrokeThickness"
-                                        Value="2"/>
-                            </DataTrigger>
-                        </Border.Triggers>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+    <CollectionView ItemsSource="{Binding Options, Source={x:Reference ColorSelector}}"
+                    SelectionMode="None">
+        <CollectionView.ItemsLayout>
+            <LinearItemsLayout Orientation="Horizontal"
+                               ItemSpacing="4"/>
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="models:ColorOption">
+                <Border WidthRequest="45"
+                        BackgroundColor="{Binding HexCode}"
+                        Stroke="{DynamicResource Gray700}"
+                        StrokeShape="RoundRectangle 4"
+                        StrokeThickness="1">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnColorTapped"
+                                              CommandParameter="{Binding .}"/>
+                    </Border.GestureRecognizers>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border"
+                                     Binding="{Binding IsSelected}"
+                                     Value="True">
+                            <Setter Property="Stroke"
+                                    Value="{DynamicResource White}"/>
+                            <Setter Property="StrokeThickness"
+                                    Value="2"/>
+                        </DataTrigger>
+                    </Border.Triggers>
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </ContentView>
