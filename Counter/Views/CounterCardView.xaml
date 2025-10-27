@@ -20,6 +20,7 @@
                    FontSize="Medium"
                    TextColor="Gray"/>
             <Label Text="{Binding Value}"
+                   TextColor="{Binding Color, Converter={StaticResource StringHexToColorConverter}}"
                    FontSize="Large"/>
             <StackLayout Orientation="Horizontal"
                          Spacing="8"
