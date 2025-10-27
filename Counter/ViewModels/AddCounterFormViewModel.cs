@@ -61,7 +61,7 @@ namespace Counter.ViewModels {
 				}
 			}
 
-			var colorHex = SelectedColor?.HexCode ?? "#000000";
+			var colorHex = SelectedColor?.HexCode ?? "#ffffff";
 
 			// Call the callback to notify that a counter should be added
 			_onAddCounter(NewCounterName, initialValue, colorHex);
